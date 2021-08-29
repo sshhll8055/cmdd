@@ -1,0 +1,214 @@
+let fs = require("fs");
+
+let path=require('path');
+
+let arguments = process.argv.slice(2);
+
+let flags = [];
+let filenames = [];
+let addnames = [];
+
+for(let i=0 ; i<arguments.length ; i++) {
+    if(arguments[i].startsWith("-")) {
+        flags.push(arguments[i]);
+     } else if(arguments[i].endsWith(".txt")) {
+        filenames.push(arguments[i]);
+     
+     }  else{
+        addnames.push(arguments[i]);
+    }
+}
+
+function removeAll(string, removalData) {
+         return string.split(removalData).join("");
+     }
+    
+     function addSequence(content){
+        let contentArr=content.split("\n");
+        for(let i=0;i<contentArr.length;i++){
+            contentArr[i]=(i+1)+" "+contentArr[i];
+        }
+        return contentArr;
+    }
+    
+    function addSequenceTnel(content){
+        let contentArr=content.split("\n");
+        let count=1;
+        for(let i=0;i<contentArr.length;i++){
+            if(contentArr[i] != ""){
+                contentArr[i]=count+" "+contentArr[i];
+                count++;
+            }
+        }
+        return contentArr;
+    }
+    
+    function removeExtraLine(fileData){
+        let contentArr=fileData.split("\n");
+        let data=[];
+        for(let i=1;i<contentArr.length;i++){
+            if(contentArr[i]=="" && contentArr[i-1]==""){
+                contentArr[i]=null;
+            }
+            if(contentArr[i]=="" && contentArr[i-1]==null){
+                contentArr[i]=null;
+            }
+        }
+    
+        for(let i=0;i<contentArr.length;i++){
+            if(contentArr[i]!=null){
+                data.push(contentArr[i]);
+            }
+        }
+        return data;
+    }
+
+for(let file of filenames) {
+    let fileData = fs.readFileSync(file,"utf-8");
+     for(let flag of flags) {
+         if(flag == "-rs") {         
+            
+            fileData = removeAll(fileData," ");
+            console.log(fileData);
+        }
+        if(flag == "-rn") {
+            fileData = removeAll(fileData, "\r\n")
+            console.log(fileData);
+        }
+        if(flag=="-s"){
+            let data = addSequence(fileData);
+             console.log(data);
+        }
+        if(flag=="-y"){
+            let data=addSequenceTnel(fileData);
+            console.log(data);
+        }
+        if(flag=="-rel"){
+            let ans=removeExtraLine(fileData);
+            for(let i=0;i<ans.length;i++){
+                console.log(ans[i]);
+            }
+            }       
+    }
+    // console.log(fileData);
+}
+
+for(let add of addnames)
+ {
+
+    let input=add;
+
+    for(let flag of flags){
+
+        if(flag == "-copy"){
+
+    let allEntities=fs.readdirSync(input);
+    console.log("all entities are ",allEntities);
+    
+    let content="";
+
+    for(let i=0;i<allEntities.length;i++){
+    let entityName=allEntities[i];
+    // console.log(entityName);
+    let eName=path.join(input,entityName);
+    let statusObj=fs.lstatSync(eName);
+    // console.log(stats);
+    let isFile=statusObj.isFile();
+    if(isFile){
+        let extName=path.extname(eName);
+        if(extName=='.txt'){
+            content+=fs.readFileSync(eName);
+        }
+    }
+}
+fs.writeFileSync('newfile.txt',content);
+}
+
+if(flag == "-pjd")
+{
+     
+     let mainDir=input[0]; //webD
+ 
+let subDirectories=input.slice(1); // javascrip react mongodb
+
+
+let mainDirPath=path.join(process.cwd(),mainDir);
+if(!fs.existsSync(mainDirPath)){
+    fs.mkdirSync(mainDirPath);
+}
+for(let i=0;i<subDirectories.length;i++){
+    // console.log(subDirectories[i]);
+    let folder=path.join(mainDirPath,subDirectories[i]);
+    console.log('folder path  ',folder);
+    if(fs.existsSync(folder)==false){
+        fs.mkdirSync(folder);
+    }
+    for(let j=1;j<=3;j++){
+        let module=path.join(folder,`Module${j}`);
+        console.log('module names',module);
+        fs.mkdirSync(module);
+        let fileName=path.join(module,'content.md');
+        fs.writeFileSync(fileName,'#Hello Everyone');
+    }
+}
+
+
+
+}
+}
+}
+
+// if(flag=="-s"){
+//     let data=addSequence(fileData);
+//     console.log(data);
+// }
+// if(flag=="-sn"){
+//     let data=addSequenceTnel(fileData);
+//     console.log(data);
+// }
+// if(flag=="-rel"){
+//     let ans=removeExtraLine(fileData);
+//     for(let i=0;i<ans.length;i++){
+//         console.log(ans[i]);
+
+    
+//         function addSequence(content){
+//             let contentArr=content.split("\n");
+//             for(let i=0;i<contentArr.length;i++){
+//                 contentArr[i]=(i+1)+" "+contentArr[i];
+//             }
+//             return contentArr;
+//         }
+        
+//         function addSequenceTnel(content){
+//             let contentArr=content.split("\n");
+//             let count=1;
+//             for(let i=0;i<contentArr.length;i++){
+//                 if(contentArr[i]!=""){
+//                     contentArr[i]=count+" "+contentArr[i];
+//                     count++;
+//                 }
+//             }
+//             return contentArr;
+//         }
+        
+//         function removeExtraLine(fileData){
+//             let contentArr=fileData.split("\n");
+//             let data=[];
+//             for(let i=1;i<contentArr.length;i++){
+//                 if(contentArr[i]=="" && contentArr[i-1]==""){
+//                     contentArr[i]=null;
+//                 }
+//                 if(contentArr[i]=="" && contentArr[i-1]==null){
+//                     contentArr[i]=null;
+//                 }
+//             }
+        
+//             for(let i=0;i<contentArr.length;i++){
+//                 if(contentArr[i]!=null){
+//                     data.push(contentArr[i]);
+//                 }
+//             }
+//             return data;
+//         }
+        
