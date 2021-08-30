@@ -19,3 +19,4 @@ It provides serial numbers to all the lines including empty lines present in the
 wcat -copyd "filepath"
 
 It read the directories content and create a new file and write all the content in it. 
+
